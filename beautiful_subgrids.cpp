@@ -1,9 +1,17 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+
+using tp = chrono::high_resolution_clock::time_point;
+
 using ll = long long;
 using pii = pair<int,int>;
-using tp = chrono::high_resolution_clock::time_point;
+using vs = vector<string>;
+using vi = vector<int>;
+using vvi = vector<vector<int>>;
+using vvvi = vector<vector<vector<int>>>;
+
+int mod = 1e9 + 7;
 
 void printCurrentTime() {
     time_t t = time(nullptr);
@@ -25,7 +33,7 @@ void printRuntime(tp start, tp end) {
 }
 
 void program() {
-    cout << "this is want i want" << endl;
+    
 }
 
 int main() {    
