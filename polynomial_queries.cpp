@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-#pragma GCC target("popcnt")
 using namespace std;
 
 
@@ -34,31 +33,23 @@ void printRuntime(tp start, tp end) {
 }
 
 void program() {
-    int n;
-    cin >> n;
-    bitset<3001> rows[n];
-    for (int i = 0; i < n; i++) {
-        cin >> rows[i];
-    }
-    ll res = 0;
-    for (int i = 0; i < n; i++) {
-        for (int j = i + 1; j < n; j++) {
-            int common = (rows[i] & rows[j]).count();
-            res += (common * (common - 1)) / 2;
-        }
-    }
-    cout << res;
+    int n, q;
+    cin >> n >> q;
+    vector<int> arr(n);
+    for (int& i : arr)  cin >> i;
+
+    // not seen yet
 }
 
 int main() {    
-    // freopen("input.txt", "r", stdin);
+    freopen("input.txt", "r", stdin);
     freopen("output.txt", "w", stdout);
-    // printCurrentTime();
+    printCurrentTime();
     auto start = chrono::high_resolution_clock::now();
 
     program();
 
     auto end = chrono::high_resolution_clock::now();
-    // printRuntime(start, end);
+    printRuntime(start, end);
     return 0;
 }

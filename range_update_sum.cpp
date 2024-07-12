@@ -31,6 +31,7 @@ ll handleSumQuery(ll tree[], ll update_range_tree[], ll set_range_tree[], ll ind
         
         tree[index] += ((h - l + 1) * update_range_tree[index]);
         if (l != h) {
+            
             if (set_range_tree[li] > 0) {
                 set_range_tree[li] += update_range_tree[index];
             } else {

@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-#pragma GCC target("popcnt")
 using namespace std;
 
 
@@ -33,26 +32,52 @@ void printRuntime(tp start, tp end) {
     cout << "Runtime: " << duration.count() << " seconds" << endl;
 }
 
+long long int inverse(long long int num){
+    if (num == 1) return 1;
+
+    long long int q = mod / num;
+    long long int r = mod % num;
+
+    long long int rem_inv = inverse(r);
+
+    return (mod - (q * rem_inv) % mod + mod) % mod;
+}
+
+long long int nCr(int n, int r) {
+    // n ! / (n - r) ! r !
+    long long int res = 1;
+    long long int nFact = 1;
+    long long int rFact = 1;
+    long long int nMinusRFact = 1;
+    long long int cur = 1;
+
+    for (int i = 1; i <= n; i++) {
+        cur = (cur * i) % mod;
+        
+        if (i == n) nFact = cur;
+        if (i == r) rFact = cur;
+        if (i == (n - r)) nMinusRFact = cur;
+    }
+
+    res = (nFact * inverse(nMinusRFact)) % mod;
+
+    res = (res * inverse(rFact)) % mod;
+
+    return res;
+}
+
 void program() {
-    int n;
-    cin >> n;
-    bitset<3001> rows[n];
-    for (int i = 0; i < n; i++) {
-        cin >> rows[i];
-    }
-    ll res = 0;
-    for (int i = 0; i < n; i++) {
-        for (int j = i + 1; j < n; j++) {
-            int common = (rows[i] & rows[j]).count();
-            res += (common * (common - 1)) / 2;
-        }
-    }
-    cout << res;
+    int n, m;
+    cin >> n >> m;
+    // need to choose n - 1 place for bars from m + n - 1 places
+    // (m + n - 1) C (n - 1)
+    // (m + n - 1) ! / (m)! (n - 1)!
+    cout << nCr(n + m - 1, n - 1);
 }
 
 int main() {    
     // freopen("input.txt", "r", stdin);
-    freopen("output.txt", "w", stdout);
+    // freopen("output.txt", "w", stdout);
     // printCurrentTime();
     auto start = chrono::high_resolution_clock::now();
 

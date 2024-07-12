@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-#pragma GCC target("popcnt")
 using namespace std;
 
 
@@ -34,25 +33,52 @@ void printRuntime(tp start, tp end) {
 }
 
 void program() {
-    int n;
-    cin >> n;
-    bitset<3001> rows[n];
-    for (int i = 0; i < n; i++) {
-        cin >> rows[i];
+    int n, m;
+    cin >> n >> m;
+    vector<pair<int,int>> adj[n];
+    for (int i = 0; i < m; i++) {
+        int a, b, r;
+        cin >> a >> b >> r;
+        adj[a - 1].push_back({b - 1, r});
+        adj[b - 1].push_back({a - 1, r});
     }
+    vector<int> vis(n, 0);
+    priority_queue<pair<int,int>, vector<pair<int,int> >, greater<pair<int,int>> > pq;
+    pq.push({0, 0});
     ll res = 0;
-    for (int i = 0; i < n; i++) {
-        for (int j = i + 1; j < n; j++) {
-            int common = (rows[i] & rows[j]).count();
-            res += (common * (common - 1)) / 2;
+    while (!pq.empty()) {
+
+        int edgew = pq.top().first;
+        int node = pq.top().second;
+
+        pq.pop();
+        if (vis[node]) continue;
+        vis[node] = 1;
+
+        res += edgew;
+
+
+        vis[node] = 1;
+        for (auto n : adj[node]) {
+            int ele = n.first;
+            int cost = n.second;
+            if (vis[ele]) continue;
+            pq.push({cost, ele});
         }
     }
+
+    for (int i : vis) {
+        if (i) continue;
+        cout << "IMPOSSIBLE";
+        return;
+    }
+
     cout << res;
 }
 
 int main() {    
     // freopen("input.txt", "r", stdin);
-    freopen("output.txt", "w", stdout);
+    // freopen("output.txt", "w", stdout);
     // printCurrentTime();
     auto start = chrono::high_resolution_clock::now();
 

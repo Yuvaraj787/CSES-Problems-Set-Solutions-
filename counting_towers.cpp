@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-#pragma GCC target("popcnt")
 using namespace std;
 
 
@@ -32,33 +31,40 @@ void printRuntime(tp start, tp end) {
     cout << fixed << setprecision(6);
     cout << "Runtime: " << duration.count() << " seconds" << endl;
 }
+const int si = 1e6 + 1;
+ll hash1[si][3];
+
+
+ll dp(int n, int w) {
+    if (n == 1) return 1;
+    if (hash1[n][w] != -1) return hash1[n][w];
+    if (w == 1) {
+        return hash1[n][w] = ((4 * dp(n - 1, 1)) +  dp(n - 1, 2)) % mod;
+    } else {
+        return hash1[n][w] = ((2 * dp(n - 1, 2)) + dp(n - 1, 1)) % mod;
+    }
+}
 
 void program() {
-    int n;
-    cin >> n;
-    bitset<3001> rows[n];
-    for (int i = 0; i < n; i++) {
-        cin >> rows[i];
+    memset(hash1, -1, si * 3 * sizeof(ll));
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        cout << (dp(n, 1) + dp(n, 2)) % mod << endl;
     }
-    ll res = 0;
-    for (int i = 0; i < n; i++) {
-        for (int j = i + 1; j < n; j++) {
-            int common = (rows[i] & rows[j]).count();
-            res += (common * (common - 1)) / 2;
-        }
-    }
-    cout << res;
 }
 
 int main() {    
-    // freopen("input.txt", "r", stdin);
+    freopen("input.txt", "r", stdin);
     freopen("output.txt", "w", stdout);
-    // printCurrentTime();
+    printCurrentTime();
     auto start = chrono::high_resolution_clock::now();
 
     program();
 
     auto end = chrono::high_resolution_clock::now();
-    // printRuntime(start, end);
+    printRuntime(start, end);
     return 0;
 }

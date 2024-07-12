@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-#pragma GCC target("popcnt")
 using namespace std;
 
 
@@ -34,25 +33,51 @@ void printRuntime(tp start, tp end) {
 }
 
 void program() {
-    int n;
-    cin >> n;
-    bitset<3001> rows[n];
-    for (int i = 0; i < n; i++) {
-        cin >> rows[i];
+
+    int n, target;
+    cin >> n >> target;
+    vector<int> arr(n);
+    map<int,queue<int>> mp;
+
+    int idx = 1;
+
+    for (int& i : arr) {
+        cin >> i;
+        mp[i].push(idx++);
     }
-    ll res = 0;
+    
+    sort(arr.begin(), arr.end());
+
     for (int i = 0; i < n; i++) {
-        for (int j = i + 1; j < n; j++) {
-            int common = (rows[i] & rows[j]).count();
-            res += (common * (common - 1)) / 2;
+        int rem = target - arr[i];
+        int j = i + 1;
+        int k = n - 1;
+        while (j < k) {
+            int sum = arr[j] + arr[k];
+            if (sum == rem) {
+                int f = mp[arr[i]].front();
+                mp[arr[i]].pop();
+                int s = mp[arr[j]].front();
+                mp[arr[j]].pop();
+                int t = mp[arr[k]].front();
+                mp[arr[k]].pop();
+                cout << f << " " << s << " " << t;
+                return;
+            } else if (sum > rem) {
+                k--;
+            } else {
+                j++;
+            }
         }
     }
-    cout << res;
+
+    cout << "IMPOSSIBLE";
+
 }
 
 int main() {    
     // freopen("input.txt", "r", stdin);
-    freopen("output.txt", "w", stdout);
+    // freopen("output.txt", "w", stdout);
     // printCurrentTime();
     auto start = chrono::high_resolution_clock::now();
 

@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-#pragma GCC target("popcnt")
 using namespace std;
 
 
@@ -34,25 +33,59 @@ void printRuntime(tp start, tp end) {
 }
 
 void program() {
-    int n;
-    cin >> n;
-    bitset<3001> rows[n];
+
+    int n, m, q;
+    
+    cin >> n >> m >> q;
+
+    ll dist[n][n];
+
     for (int i = 0; i < n; i++) {
-        cin >> rows[i];
-    }
-    ll res = 0;
-    for (int i = 0; i < n; i++) {
-        for (int j = i + 1; j < n; j++) {
-            int common = (rows[i] & rows[j]).count();
-            res += (common * (common - 1)) / 2;
+        for (int j = 0; j < n; j++) {
+            dist[i][j] = 1e15;
         }
     }
-    cout << res;
+
+    for (int i = 0; i < m; i++) {
+        int a, b, c;
+        cin >> a >> b >> c;
+        a--;
+        b--;
+        dist[a][b] = min(dist[a][b], 1ll * c);
+        dist[b][a] = min(dist[a][b], 1ll * c);
+    }
+
+    for (int i = 0; i < n; i++) {
+        dist[i][i] = 0;
+    }
+
+
+    for (int k = 0; k < n; k++) {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if ( dist[i][k] == 1e15 || dist[k][j] == 1e15 ) continue;
+                dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]);
+            }
+        }
+    }
+
+
+    for (int i = 0; i < q; i++) {
+        int a, b;
+        cin >> a >> b;
+        a--; b--;
+        if (dist[a][b] == 1e15) {
+            cout << -1 << endl;
+        } else {
+            cout << dist[a][b] << endl;
+        }
+    }
+
 }
 
 int main() {    
     // freopen("input.txt", "r", stdin);
-    freopen("output.txt", "w", stdout);
+    // freopen("output.txt", "w", stdout);
     // printCurrentTime();
     auto start = chrono::high_resolution_clock::now();
 

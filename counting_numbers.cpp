@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-#pragma GCC target("popcnt")
 using namespace std;
 
 
@@ -33,26 +32,35 @@ void printRuntime(tp start, tp end) {
     cout << "Runtime: " << duration.count() << " seconds" << endl;
 }
 
+ll dp(int i, string& num, char prev, int tight, ll hash[2][2][10][19], int started) {
+    if (i == num.size()) return 1;
+    if (prev != '-' && hash[started][tight][prev - '0'][i] != -1) return hash[started][tight][prev - '0'][i];
+    ll possi = 0;
+    char last = tight ? num[i] : '9';
+    for (char j = '0'; j <= last; j++)  {
+        if (j == prev && started) continue;
+        possi += dp(i + 1, num, j, (tight && j == last), hash, started ? 1 : j != '0');
+    }
+    if (prev == '-') return possi;
+    return hash[started][tight][prev - '0'][i] = possi;
+}
+
 void program() {
-    int n;
-    cin >> n;
-    bitset<3001> rows[n];
-    for (int i = 0; i < n; i++) {
-        cin >> rows[i];
-    }
-    ll res = 0;
-    for (int i = 0; i < n; i++) {
-        for (int j = i + 1; j < n; j++) {
-            int common = (rows[i] & rows[j]).count();
-            res += (common * (common - 1)) / 2;
-        }
-    }
-    cout << res;
+    ll l, r;
+    cin >> l >> r;
+    ll hash[2][2][10][19];
+    memset(hash, -1,2 * 2 * 10 * 19 * sizeof(ll));
+    string num1 = to_string(l - 1);
+    string num2 = to_string(r);
+    ll high = dp(0, num2, '-', 1, hash, 0);
+    memset(hash, -1,2 * 2 * 10 * 19 * sizeof(ll));
+    ll low = dp(0, num1, '-', 1, hash, 0);
+    cout << high - low;
 }
 
 int main() {    
     // freopen("input.txt", "r", stdin);
-    freopen("output.txt", "w", stdout);
+    // freopen("output.txt", "w", stdout);
     // printCurrentTime();
     auto start = chrono::high_resolution_clock::now();
 
